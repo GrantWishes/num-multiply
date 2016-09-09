@@ -25,11 +25,10 @@ void multiply_and_print(char* num1, char* num2) {
 	int prodIndex = 0;
 	int carry = 0;
 	int maxIndex = 0;
-	int loopNum = -1;
+	int loopNum = 0;
 
 	for(int i = index1; i >= 0; i--) {
 //		printf("This is loop number %d\n",loopNum); 
-		loopNum++;
 		for(int j = index2; j >= 0; j--) {
 //			printf("Indices: %d %d\n", i, j);
 			temp = (int)(num1[i]-'0') *(int)(num2[j]-'0') + carry;
@@ -55,16 +54,33 @@ void multiply_and_print(char* num1, char* num2) {
 		if((prodIndex+loopNum) > maxIndex) {
 			maxIndex = prodIndex;
 		}
+
+		loopNum++;
 		prodIndex = loopNum;
 	}
+
 printf("MaxIndex = %d\n", maxIndex);	
 	product[maxIndex+1] = -1;
 
+
+	carry = 0;
+	for(int i = 0; product[i] != -1; i++){
+		product[i] = product[i] + carry;
+		carry = 0;
+		if(product[i] >= 10) {
+			carry = product[i] / 10;
+			product[i] = product[i] % 10;
+
+		}	
+
+
+	}
+
+
 	int endIndex = 0;
 	// temp below here
-printf("I made it!\n");
 	while( endIndex < 50 ) {
-		printf("%d",product[endIndex]);
+		printf("%d ",product[endIndex]);
 		endIndex++;
 	}
 	printf("\n");
