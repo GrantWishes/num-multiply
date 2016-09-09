@@ -32,7 +32,7 @@ void multiply_and_print(char* num1, char* num2) {
 		for(int j = index2; j >= 0; j--) {
 //			printf("Indices: %d %d\n", i, j);
 			temp = (int)(num1[i]-'0') *(int)(num2[j]-'0') + carry;
-			printf("Value: %c %c %d Total: %d \n",num1[i],num2[j],carry, temp);
+		//	printf("Value: %c %c %d Total: %d \n",num1[i],num2[j],carry, temp);
 			if(temp >= 10) {
 				carry = temp / 10;
 				temp = temp % 10;
@@ -40,27 +40,27 @@ void multiply_and_print(char* num1, char* num2) {
 			else {
 				carry = 0;
 			}
-			printf("Appending: %d at index %d\n", temp, prodIndex);
+		//	printf("Appending: %d at index %d\n", temp, prodIndex);
 			product[prodIndex] = product[prodIndex] +  temp;
 			prodIndex++;
 		}
 
 		if(carry != 0) {
-			printf("Appending: %d at index %d\n",  carry, prodIndex);
+		//	printf("Appending: %d at index %d\n",  carry, prodIndex);
 			product[prodIndex] = product[prodIndex] + carry;
 			prodIndex++;
 			carry = 0;
 		}
-		if((prodIndex+loopNum) > maxIndex) {
+//		if((prodIndex+loopNum) > maxIndex) {
 			maxIndex = prodIndex;
-		}
+//		}
 
 		loopNum++;
 		prodIndex = loopNum;
 	}
 
-printf("MaxIndex = %d\n", maxIndex);	
-	product[maxIndex+1] = -1;
+//	printf("MaxIndex = %d\n", maxIndex);	
+	product[maxIndex] = -1;
 
 
 	carry = 0;
@@ -77,18 +77,18 @@ printf("MaxIndex = %d\n", maxIndex);
 	}
 
 
-	int endIndex = 0;
+	int endIndex; 
 	// temp below here
-	while( endIndex < 50 ) {
-		printf("%d ",product[endIndex]);
-		endIndex++;
+	for(int i = maxIndex-1; i>=0; i--) {	
+		printf("%d",product[i]);
 	}
+	free(product);
 	printf("\n");
 }
 
 int main (int argc , char * argv []) {
-	FILE *file = fopen("fake.input","r");
-//	FILE *file = fopen("problem3.input","r");
+//	FILE *file = fopen("fake.input","r");
+	FILE *file = fopen("problem3.input","r");
 	if (file == NULL) {
 		printf("Input file not found.\n");
 		return 1;
