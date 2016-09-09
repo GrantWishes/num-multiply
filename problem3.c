@@ -5,64 +5,57 @@
 #define MAX_NUM_LENGTH 10000
 
 void multiply_and_print(char* num1, char* num2) {
-	int index1 = -1;
-	int index2 = -1;
+	int index1 = -1;  // length of num1 -1 for indexing
+	int index2 = -1;  // length of num2 -1 for indexing
 
-	for(int i = 0; num1[i] != '\0'; i++) {
+	for(int i = 0; num1[i] != '\0'; i++) { // get the lengths
 		index1++;
 	}
 	for(int i = 0; num2[i] != '\0'; i++) {
 		index2++;
 	}
 	
-	int *product;
+	int *product; // the array the product will be put in. once again, doing it this way because I know it works
 
-	product = calloc(MAX_NUM_LENGTH*MAX_NUM_LENGTH,sizeof(int));
+	product = calloc(MAX_NUM_LENGTH+MAX_NUM_LENGTH,sizeof(int));  // I think 20000 digits is the maximum I can get 
 
-//	printf("Index 1 is %d and Index 2 is %d\n", index1, index2);
+	int temp;                                  // holds the number to be added
+	int prodIndex = 0;                         // the index of where the number goes in product[]
+	int carry = 0;                             // how much the carry from the previous number is
+	int maxIndex = 0;                          // so I know the end of the number
+	int loopNum = 0;                           // for "adding zeros" for all iterations after #0
 
-	int temp;
-	int prodIndex = 0;
-	int carry = 0;
-	int maxIndex = 0;
-	int loopNum = 0;
-
+	// This monster does the work. Multiplies the numbers, adds them to the final product
 	for(int i = index1; i >= 0; i--) {
-//		printf("This is loop number %d\n",loopNum); 
 		for(int j = index2; j >= 0; j--) {
-//			printf("Indices: %d %d\n", i, j);
-			temp = (int)(num1[i]-'0') *(int)(num2[j]-'0') + carry;
-		//	printf("Value: %c %c %d Total: %d \n",num1[i],num2[j],carry, temp);
-			if(temp >= 10) {
+			temp = (int)(num1[i]-'0') *(int)(num2[j]-'0') + carry; // still casting black magic
+			if(temp >= 10) {                                       // if we need a carry
 				carry = temp / 10;
 				temp = temp % 10;
 			} 
-			else {
+			else {                                                // otherwise we're fine
 				carry = 0;
 			}
-		//	printf("Appending: %d at index %d\n", temp, prodIndex);
-			product[prodIndex] = product[prodIndex] +  temp;
+			product[prodIndex] = product[prodIndex] +  temp;      // add the number to the final total (if it's > 10 we'll fix it later)
 			prodIndex++;
 		}
 
-		if(carry != 0) {
-		//	printf("Appending: %d at index %d\n",  carry, prodIndex);
+		if(carry != 0) {                                              // tacking on the carry of it's there
 			product[prodIndex] = product[prodIndex] + carry;
 			prodIndex++;
 			carry = 0;
 		}
-//		if((prodIndex+loopNum) > maxIndex) {
 			maxIndex = prodIndex;
-//		}
 
 		loopNum++;
 		prodIndex = loopNum;
 	}
 
-//	printf("MaxIndex = %d\n", maxIndex);	
-	product[maxIndex] = -1;
+	product[maxIndex] = -1;                                               // here's the end of the number
 
 
+	// this takes care of any of the numbers in the array that got >10
+	// moves the carry to the next number and updates the current value
 	carry = 0;
 	for(int i = 0; product[i] != -1; i++){
 		product[i] = product[i] + carry;
@@ -70,24 +63,20 @@ void multiply_and_print(char* num1, char* num2) {
 		if(product[i] >= 10) {
 			carry = product[i] / 10;
 			product[i] = product[i] % 10;
-
 		}	
-
-
 	}
 
-
-	int endIndex; 
-	// temp below here
+	// print the number in the corect order!
 	for(int i = maxIndex-1; i>=0; i--) {	
 		printf("%d",product[i]);
 	}
+
 	free(product);
 	printf("\n");
+
 }
 
 int main (int argc , char * argv []) {
-//	FILE *file = fopen("fake.input","r");
 	FILE *file = fopen("problem3.input","r");
 	if (file == NULL) {
 		printf("Input file not found.\n");
